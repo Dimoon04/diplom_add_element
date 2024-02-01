@@ -5,13 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vk-miniapps-deploy"
   },
   "dependencies": {
+    "@vkontakte/vk-miniapps-deploy": "^0.1.6",
     "core-js": "^3.8.3",
+    "dynamsoft-javascript-barcode": "^9.6.32",
+    "element-ui": "^2.15.14",
     "firebase": "^7.15.5",
-    "vue": "^2.6.14",
-    "vue-yandex-maps": "^0.11.13",
+    "vue": "^2.7.16",
     "vuex": "^3.5.1",
     "vuexfire": "^3.2.2"
   },
@@ -23,6 +26,7 @@
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "vue-cli-plugin-element": "~1.0.1",
     "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {

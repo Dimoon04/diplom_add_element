@@ -8,16 +8,22 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        zag:[],  // переменные , данные , состояние 
-        teachers:[],
-        g40b:[]
+        imei:[],  // переменные , данные , состояние 
+        bars_array:[], //сканированные imei
     },
     mutations: {
         ...vuexfireMutations,  // мутации изменяют state если происходят action
+        set_bars(state, data){
+           state.bars_array.push(data)
+          
+        },
+        set_exst(state,id){
+            state.bars_array.filter((n)=>{ return n.id.match(id)  })[0].exst = true
+        }
     },
     actions: {
         bindZag: firestoreAction(({ bindFirestoreRef }) => {
-            return bindFirestoreRef('zag', db.collection('zagadki'))
+            return bindFirestoreRef('imei', db.collection('list_imei'))
         }), // 
         bindGL: firestoreAction(({ bindFirestoreRef }) => {
             return bindFirestoreRef('g40b', db.collection('g40b'))
@@ -42,18 +48,21 @@ export const store = new Vuex.Store({
                 .doc(id)
                 .update(doc)
         }),
+        pushNewBar(context,payload){
+           context.commit('set_bars',payload)
+        },
 
        
        initFirebase(){
         //  const firebaseApp =
           firebase.initializeApp({
-            apiKey: "AIzaSyDC4qJty0l_AMa7kN-TP__cGh0cRH9BKok",
-            authDomain: "rusik-magaz17.firebaseapp.com",
-            databaseURL: "https://rusik-magaz17-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "rusik-magaz17",
-            storageBucket: "rusik-magaz17.appspot.com",
-            messagingSenderId: "37682391596",
-            appId: "1:37682391596:web:c2fa73eda7beff2eb0ff89"
+            apiKey: "AIzaSyAl1xl6-9BNdpAc_FuYeIAq1zJjJHAs89I",
+            authDomain: "list-imei.firebaseapp.com",
+            projectId: "list-imei",
+            storageBucket: "list-imei.appspot.com",
+            messagingSenderId: "975717760165",
+            appId: "1:975717760165:web:361311fb63577481a1214c",
+            measurementId: "G-NCKFSDY13W"
           });
         },
     }
