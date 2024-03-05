@@ -5,21 +5,21 @@
     <Decoder
       style="margin-top: 40px;"
     ></Decoder>
-    <UV></UV>
+    <Bottom></Bottom>
   </div>
 </template>
 
 <script>
 
 import Decoder from './components/Decoder.vue'
- import UV from './components/UslovView.vue'
  import HeaderUi from './components/HeaderUi.vue'
+ import Bottom from './components/BottomUi.vue'
 export default {
   name: 'App',
   components:{
-     HeaderUi,
+    HeaderUi,
     Decoder,
-     UV
+    Bottom
   },
   data(){
     return {

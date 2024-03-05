@@ -1,91 +1,93 @@
 <template>
-  <div class="helloWorld">
-    
-    <!-- <div>
-      <button
-        class="btn-video" :style="{ 
-          backgroundColor: bShowScanner ? '#75c3ff' : '#343a40',
-          color: bShowScanner ? '#212529' : 'gray',
-          fontWeight: bShowScanner ? 'bold' : 'normal',
-          textDecoration: bShowScanner ? 'underline' : ''
-          }" 
-          @click="showScanner">Камера</button> 
-      <button 
-        class="btn-img" :style="{ 
-          backgroundColor: bShowImgDecode ? '#75c3ff' : '#343a40',
-          color: bShowScanner ? 'gray' : '#212529',
-          fontWeight: bShowScanner ? 'normal' : 'bold',
-          textDecoration: bShowScanner ? '' : 'underline'
-          }" @click="showImgDecode">Фото</button>
-    </div> -->
+  <div class="parent">
     <div class="container">
-      <!-- <VideoDecode v-if="bShowScanner"></VideoDecode> -->
-      <ImgDecode ></ImgDecode>
-    </div>
-    <div class="imei_result" v-if="bars_array.length > 0">
-      <table class="w3-table w3-striped">
-         <tr v-for="(b,index) in bars_array" :key="index">
-              <td class="imei_out" :style="{color: b.exst ? 'red' : ''}">
-                {{ b.id }} <br>
-                <div v-if="b.exst">
-                  <button v-on:click="filteredList" class="btn-info"> Подробнее</button>
-                  <!-- <div v-if="">
-                    
-                  </div> -->
-                </div>
-              </td>
-              
-         </tr>
-      </table>
-    </div>
+      <!-- <ImgDecode ></ImgDecode> -->
+      <el-row :gutter="10">
+        <el-col :xs="3" :sm="4" :md="7" :lg="7" :xl="1"><div class="grid-content "></div></el-col>
+        <el-col :xs="18" :sm="16" :md="10" :lg="10" :xl="11">
+          <div class="ImgDecode">
+            <div class="description"> 
+              <img id="uploadIcon" src="../assets/upload.png" alt=""><br><br>
+              <p>Перетащите изображение сюда или <b>нажмите чтобы загрузить</b>.</p>
+            </div>
 
-
-    <el-drawer
-  title="I am the title"
-  :visible.sync="drawer" size="50%"
-  :with-header="false">
-    <h2>{{ phoneInfo.color }}</h2>
-    <h2>{{ phoneInfo.phoneName }}</h2>
-</el-drawer>
-
-
-<!-- <el-row :gutter="10">
-  <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple"></div></el-col>
-  <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"><div class="grid-content bg-purple-light"></div></el-col>
-  <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"><div class="grid-content bg-purple"></div></el-col>
-  <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light"></div></el-col>
-</el-row> -->
+            <div id="dropzone">
+              <input type="file" @change="decodeImg" title="">
+            </div>
+          </div>
 
 
 
 
 
+          <div class="imei_result" v-if="bars_array.length > 0">
+            <div class="table_out">  
+              <table class="w3-table w3-striped">
+                <tr v-for="(b,index) in bars_array" :key="index">
+                      <td class="imei_out">
+                        {{ b.id }}  <br>
+                      </td> 
+                </tr>
+              </table>
+            </div>
+            <!-- <button v-on:click="filteredList" class="btn_info"> Подробнее</button> -->
+
+            <!-- <el-collapse accordion v-for="i in filteredList" :key="i"> -->
+            
+
+          </div>
+
+          
+
+          <div >
+            <button v-on:click="filteredList" class="btn_info"> Подробнее</button>
+            
+            <div v-for="(w, index) in bars_array" :key="index">
+            {{ w }}
+            </div>
+            
 
 
-
+            <el-drawer
+              title="I am the title"
+              :visible.sync="drawer" size="50%"
+              :with-header="false">
+                <h2>{{ phoneInfo }}</h2>
+                
+            </el-drawer>
+          </div>
+          
+        </el-col>
+        <el-col :xs="3" :sm="4" :md="7" :lg="7" :xl="1"><div class="grid-content "></div></el-col>
+      </el-row>
+    </div>  
   </div>
 </template>
 
 <script>
 import "../dbr"; // import side effects. The license, engineResourcePath, so on.
 import { BarcodeReader } from "dynamsoft-javascript-barcode";
-// import VideoDecode from "./VideoDecode.vue";
-import ImgDecode from './ImgDecode.vue'
 import {store} from '../store'
+
 
 export default {
   name: "HelloWorld",
   data() {
     return {
+      pReader: null,
       drawer:false,
-      // bShowScanner: false,
       bShowImgDecode: true,
       list: store.state.imei, // получение доп информации - подробнее
-      phoneInfo:''
+      phoneInfo:[]
+
      
     };
   },
   computed:{
+    List(){
+        return store.state.imei
+    },
+    
     bars_array(){
       return store.state.bars_array
     }
@@ -104,80 +106,247 @@ export default {
       console.error(errMsg);
       alert(errMsg);
     }
+    
   },
   components: {
-    // VideoDecode,
-     ImgDecode
+    
   },
   methods: {
+
+    push_barcode(code){
+        store.dispatch('pushNewBar',{id:code,exst:''})
+
+          // this.bars_array.push({ code:code, status:''  })
+    },
+
+    async decodeImg(e) {
+        try {
+          const reader = await (this.pReader = this.pReader || BarcodeReader.createInstance());
+          let results = await reader.decode(e.target.files[0]);
+          for (let result of results) {
+                this.push_barcode(result.barcodeText)
+                // alert(result.barcodeText);
+          }
+          if (!results.length) { this.push_barcode('IMEI не найдено'); }
+        } catch (ex) {
+          let errMsg;
+          if (ex.message?.includes("Нет подключения к сети")) {
+            errMsg = "Не удалось подключить соединение с сервером. Пожалуйста, проверьте подключение к сети.";
+          } else {
+            errMsg = ex.message||ex;
+          }
+          console.error(errMsg);
+          alert(errMsg);
+        }
+        e.target.value = '';
+      },
+
+
+
     filteredList(){
       this.drawer = true
+      const newarr = []
       this.bars_array.forEach(b => {
         if (b.exst === true) {
-          let document = this.list.find((doc) => {
-            return doc.imei === b.id;
-          });
-          console.log(document.color, " ", document.phoneName)
-          this.phoneInfo = document
+          let document = this.list.find((doc) => doc.imei === b.id);
+          // console.log(document.color, "filteredList ", document.phoneName)
+          if (document){
+            newarr.push(document)
+          }
+        }else{
+          this.phoneInfo = "Устройство не обнаружено."
+          console.log("false", this.phoneInfo)
         }
-      });
-    } 
-  }
+
+      })
+      this.phoneInfo = newarr
+    },
+    // filteredList(){
+    //   this.drawer = true
+    //   this.bars_array.forEach(b => {
+    //     if (b.exst === true) {
+    //       let document = this.list.find((doc) => {
+    //         return doc.imei === b.id;
+    //       });
+    //       console.log(document.color, "filteredList ", document.phoneName)
+    //       this.phoneInfo = document
+    //     }else{
+    //       this.phoneInfo = "Устройство не обнаружено."
+    //     }
+    //   });
+    // },
+    
+    checkImeis() {
+        let imei = store.state.imei
+        let bars_array = store.state.bars_array
+          for (let b in imei){
+            for (let i in bars_array){
+              if (imei[b].imei==bars_array[i].id){
+                console.log('есть exst')
+                store.commit('set_exst',bars_array[i].id)
+                
+              }else{
+                console.log('non')
+                
+              }
+            }
+            
+          }
+      },
+  },
+  watch:{
+    bars_array(){
+      console.log("вызов")
+      this.checkImeis()
+    }
+  },
+  
+  async beforeDestroy() {
+      if (this.pReader) {
+        (await this.pReader).destroyContext();
+        console.log('ImgDecode Component Unmount');
+      }
+    }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1 {
-  font-size: 1.5em;
-}
-
-button {
-  font-size: 1.5rem;
-  margin-bottom: 2vh;
-  border: none;
-}
-
-.btn-info{
-  border-radius: 5px;
-  background-color: #455a64;
-  color: #75c3ff;
-  width: 80px;
-  height: 24px;
-  font-size: small;
-  text-decoration: none;
-  margin: 0;
-}
 
 
-.helloWorld {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+
+
+
+.parent{
+  margin: 0 !important;
 }
 .container {
   margin: 2vmin auto;
   text-align: center;
-  font-size: medium;
   width: 100%;
 }
 
 .imei_result{
   margin: 2vmin auto;
-  text-align: center;
-  font-size: medium;
-  width: 600px;
+  width: 100%;
+  display: inline-block;
   border: 2px rgb(117, 195, 255) solid;
   border-radius: 10px;
+  animation: ani 1s forwards;
+  justify-content: center;
+}
+@keyframes ani {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+.table_out{
+  display: flex;
+  justify-content: center;
 }
 .imei_out{
-  font-size: 20px;
+  font-size: 2.5vmin;
   text-align: center;
   justify-content: center;
 }
+.btn_info{
+  border-radius: 5px;
+  background-color: #212529;
+  border: #75c3ff 1px solid;
+  color: #75c3ff;
+  width: 100%;
+  height: 4vmin;
+  font-size: 2.5vmin;
+  text-decoration: none;
+}
+.btn_info:hover{
+  cursor: pointer;
+}
+table{
+  text-align: center;
+}
 
+
+p{
+  margin: 0;
+}
+
+
+
+
+
+
+.ImgDecode {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#dropzone{
+  width: 100%;
+  height: 200px;
+  border: 2px dashed gray;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.01s;
+}
+#dropzone:hover{
+  border: 2px dashed #212529;
+  background-color: #d6edff;
+  transition: 1s;
+  
+}
+#uploadIcon{
+  margin-top: 20px;
+  width: 7.5vmin;
+}
+
+input[type='file'] {
+  width: 100%;
+  height: 200px;
+  opacity:0;    
+  position: absolute;
+}
+input[type='file']:hover {
+  width: 100%;
+  height: 200px;
+  opacity:0;    
+  position: absolute;
+  cursor: pointer;
+  
+}
+.description{
+  font-size:2vmin;
+  justify-content: center;
+  margin: 0;
+  position: absolute;
+}
+
+
+
+
+
+
+
+.el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
 
 
 

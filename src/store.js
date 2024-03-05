@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import { db } from './db'
-import firebase from 'firebase/app'
+// import firebase from 'firebase/app'
 
 Vue.use(Vuex);
 
@@ -53,18 +53,18 @@ export const store = new Vuex.Store({
         },
 
        
-       initFirebase(){
-        //  const firebaseApp =
-          firebase.initializeApp({
-            apiKey: "AIzaSyAl1xl6-9BNdpAc_FuYeIAq1zJjJHAs89I",
-            authDomain: "list-imei.firebaseapp.com",
-            projectId: "list-imei",
-            storageBucket: "list-imei.appspot.com",
-            messagingSenderId: "975717760165",
-            appId: "1:975717760165:web:361311fb63577481a1214c",
-            measurementId: "G-NCKFSDY13W"
-          });
-        },
+    //    initFirebase(){
+    //     //  const firebaseApp =
+    //       firebase.initializeApp({
+    //         apiKey: "AIzaSyAl1xl6-9BNdpAc_FuYeIAq1zJjJHAs89I",
+    //         authDomain: "list-imei.firebaseapp.com",
+    //         projectId: "list-imei",
+    //         storageBucket: "list-imei.appspot.com",
+    //         messagingSenderId: "975717760165",
+    //         appId: "1:975717760165:web:361311fb63577481a1214c",
+    //         measurementId: "G-NCKFSDY13W"
+    //       });
+    //     },
     }
 })
 
