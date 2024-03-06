@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style>
+@import url(style.css);
 #app {
   
   font-family: Avenir, Helvetica, Arial, sans-serif;

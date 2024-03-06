@@ -1,0 +1,140 @@
+
+
+
+.btn-auth{
+    font-size: 30px;
+}
+
+.parent{
+    margin: 0 !important;
+  }
+  .container {
+    margin: 2vmin auto;
+    text-align: center;
+    width: 100%;
+  }
+  
+
+  .imei_result{
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    border: 2px rgb(117, 195, 255) solid;
+    box-sizing: border-box;
+    border-radius: 10px;
+    animation: ani 1s forwards;
+    justify-content: center;
+    
+  }
+  @keyframes ani {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+  }
+  .table_out{
+    display: flex;
+    justify-content: center;
+  }
+  .imei_out{
+    font-size: 2.5vmin;
+    text-align: center;
+    justify-content: center;
+  }
+  .btn_info{
+    border-radius: 5px;
+    background-color: #212529;
+    border: #75c3ff 1px solid;
+    color: #75c3ff;
+    width: 100%;
+    height: 4vmin;
+    font-size: 2.5vmin;
+    text-decoration: none;
+  }
+  .btn_info:hover{
+    cursor: pointer;
+  }
+  table{
+    text-align: center;
+  }
+  
+  
+  p{
+    margin: 0;
+  }
+  
+  
+  
+  
+  
+  
+  .ImgDecode {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  #dropzone{
+    width: 100%;
+    height: 200px;
+    border: 2px dashed gray;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.01s;
+  }
+  #dropzone:hover{
+    border: 2px dashed #212529;
+    background-color: #d6edff;
+    transition: 1s;
+    
+  }
+  #uploadIcon{
+    margin-top: 20px;
+    width: 7.5vmin;
+  }
+  
+  input[type='file'] {
+    width: 100%;
+    height: 200px;
+    opacity:0;    
+    position: absolute;
+  }
+  input[type='file']:hover {
+    width: 100%;
+    height: 200px;
+    opacity:0;    
+    position: absolute;
+    cursor: pointer;
+    
+  }
+  .description{
+    font-size:2.2vmin;
+    justify-content: center;
+    margin: 0;
+    position: absolute;
+  }
+  
+  
+  
+  
+  
+  
+  
+  .el-col {
+      border-radius: 4px;
+    }
+    .bg-purple-dark {
+      background: #99a9bf;
+    }
+    .bg-purple {
+      background: #d3dce6;
+    }
+    .bg-purple-light {
+      background: #e5e9f2;
+    }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }

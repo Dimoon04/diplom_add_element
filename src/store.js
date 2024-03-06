@@ -19,7 +19,10 @@ export const store = new Vuex.Store({
         },
         set_exst(state,id){
             state.bars_array.filter((n)=>{ return n.id.match(id)  })[0].exst = true
-        }
+        },
+        clearBarsArray(state) {
+            state.bars_array = [];
+          }
     },
     actions: {
         bindZag: firestoreAction(({ bindFirestoreRef }) => {
