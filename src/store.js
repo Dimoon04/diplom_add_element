@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import { db } from './db'
-// import firebase from 'firebase/app'
+import firebase from 'firebase/app'
+import "firebase/auth"
 
 Vue.use(Vuex);
 
@@ -10,6 +11,8 @@ export const store = new Vuex.Store({
     state: {
         imei:[],  // переменные , данные , состояние 
         bars_array:[], //сканированные imei
+        user:null,
+
     },
     mutations: {
         ...vuexfireMutations,  // мутации изменяют state если происходят action
@@ -22,7 +25,10 @@ export const store = new Vuex.Store({
         },
         clearBarsArray(state) {
             state.bars_array = [];
-          }
+        },
+        SET_USER(state, user) {
+           state.user = user
+        },
     },
     actions: {
         bindZag: firestoreAction(({ bindFirestoreRef }) => {
@@ -54,20 +60,24 @@ export const store = new Vuex.Store({
         pushNewBar(context,payload){
            context.commit('set_bars',payload)
         },
-
-       
-    //    initFirebase(){
-    //     //  const firebaseApp =
-    //       firebase.initializeApp({
-    //         apiKey: "AIzaSyAl1xl6-9BNdpAc_FuYeIAq1zJjJHAs89I",
-    //         authDomain: "list-imei.firebaseapp.com",
-    //         projectId: "list-imei",
-    //         storageBucket: "list-imei.appspot.com",
-    //         messagingSenderId: "975717760165",
-    //         appId: "1:975717760165:web:361311fb63577481a1214c",
-    //         measurementId: "G-NCKFSDY13W"
-    //       });
-    //     },
+        async login(context,{email, password}){
+            console.log(email)
+            console.log(password)
+            const promise = await firebase.auth().signInWithEmailAndPassword(email, password);
+            try{
+                if (promise){
+                store.commit('SET_USER', promise.user)
+                } else{
+                throw new Error('error')
+                }
+            }catch(error){
+                console.log(error)
+            }
+          },
+        async signout(){
+            firebase.auth().signOut();
+            store.commit('SET_USER', null)
+        }
     }
 })
 
