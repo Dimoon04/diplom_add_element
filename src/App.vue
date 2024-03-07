@@ -5,7 +5,9 @@
     <Decoder
       style="margin-top: 40px;"
     ></Decoder>
+    <!-- <SignIn></SignIn> -->
     <Bottom></Bottom>
+
   </div>
 </template>
 
@@ -14,12 +16,14 @@
 import Decoder from './components/Decoder.vue'
  import HeaderUi from './components/HeaderUi.vue'
  import Bottom from './components/BottomUi.vue'
+//  import SignIn from './components/SignIn.vue'
 export default {
   name: 'App',
   components:{
     HeaderUi,
     Decoder,
-    Bottom
+    Bottom,
+    // SignIn
   },
   data(){
     return {
